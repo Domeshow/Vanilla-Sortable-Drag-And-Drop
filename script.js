@@ -9,9 +9,30 @@ lists.forEach((list) => {
     list.addEventListener('dragover', (e) => {
         e.preventDefault();
         let draggingCard = document.querySelector('.dragging');
-        list.appendChild(draggingCard);
+        let cardAfterDraggingCard = getCardAfterDraggingCard(list, e.clientY);
+        if (cardAfterDraggingCard) {
+            cardAfterDraggingCard.parentNode.insertBefore(draggingCard, cardAfterDraggingCard);
+        } else {
+            list.appendChild(draggingCard);
+        }
     })
 })
+
+function getCardAfterDraggingCard(list, yDraggingCard) {
+    let listCards = [...list.querySelectorAll('.card:not(.dragging)')];
+    return listCards.reduce((closestCard, nextCard) => {
+        let nextCardRect = nextCard.getBoundingClientRect();
+        let offset = yDraggingCard - nextCardRect.top - nextCardRect.height /2;
+
+        if (offset < 0 && offset > closestCard.offset) {
+            return {offset, element: nextCard};
+        } else {
+            return closestCard;
+        }
+
+    }, {offset: Number.NEGATIVE_INFINITY}).element
+
+}
 
 function registerEventOnCard(card) {
     card.addEventListener('dragstart', (e) => {
