@@ -23,7 +23,8 @@ body, html {
     width: 23%;
     background-color: rgb(186, 186, 186);
     border-radius: 3px;
-    padding: 10px;
+    padding: 20px;
+    box-sizing: border-box;
 }
 
 h1 {
